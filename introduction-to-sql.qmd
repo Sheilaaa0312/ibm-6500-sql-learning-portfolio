@@ -89,18 +89,13 @@ FROM leads;
 
 ### CEP Application
 
-These concepts are useful for digital marketing analytics because marketing data is often stored in databases.
+The concepts in this chapter are directly relevant to my CEP because the project involves reviewing and analyzing information from multiple sources, including the PhD Orthodontics website and potentially website analytics, search data, and lead information.
 
-For example, a marketing database could contain separate tables for:
+Understanding how databases organize data into tables, rows, and columns helps me think about how different types of CEP data could be structured. For example, one table could contain website pages, another could contain search-performance data, and another could contain lead or engagement information.
 
-- campaigns;
-- leads;
-- customers;
-- conversions;
-- marketing channels; and
-- website or transaction activity.
+A row could represent one website page, one search query, or one lead, while columns could contain attributes such as page title, location, traffic source, impressions, clicks, engagement, or other performance measures.
 
-In a CEP or marketing analytics project, SQL could help me retrieve specific data. For example, I could use SQL to retrieve lead information, campaign performance, or conversion data from a database and then use the results for further analysis and reporting.
+This basic database structure could help me organize CEP data more systematically before comparing website-content findings with available digital-performance data.
 
 ## Chapter 2: Write Your First SQL Queries
 
@@ -129,7 +124,7 @@ By default, `ORDER BY` sorts in ascending order.
 
 The keyword `DESC` is added when descending order is needed.
 
-Sorting is useful when comparing marketing performance. For example, campaigns can be sorted by impressions to identify the campaigns with the greatest reach.
+Sorting is useful when comparing performance. For example, records can be sorted by impressions, clicks, engagement, or another metric to identify the highest- or lowest-performing results.
 
 #### Limiting Rows
 
@@ -255,20 +250,17 @@ LIMIT 10;
 
 ### CEP Application
 
-These SQL skills could be useful in a CEP project because they allow me to retrieve only the data that is relevant to a specific question.
+These SQL skills could support the prioritization stage of my CEP.
 
-For example, I could use `SELECT` to retrieve campaign names, channels, impressions, or conversion data from a marketing database.
+My analytics objective is to identify and prioritize website content gaps based on patient information needs, business priorities, SEO opportunities, and available performance data. SQL could help me retrieve only the variables that are relevant to a specific part of that analysis.
 
-I could then use `ORDER BY` to identify:
+For example, if website or search-performance data are available, I could use `SELECT` to retrieve fields such as page name, location, impressions, clicks, engagement, or lead-related measures.
 
-- campaigns with the highest impressions;
-- campaigns with the lowest performance;
-- conversions with the highest revenue; or
-- other high- or low-performing marketing results.
+I could then use `ORDER BY` to identify pages or search terms with relatively high or low performance. This could help me compare quantitative performance patterns with findings from my content audit.
 
-I could also use `LIMIT` to focus on only the top or bottom results instead of reviewing an entire dataset.
+`LIMIT` could also help me focus on a smaller set of priority records, such as the highest-impression pages, lowest-engagement pages, or other records that need closer review.
 
-For a CEP project, this could help me quickly identify important records before conducting further analysis in tools such as Excel, R, or other analytics software.
+This would be especially useful because my CEP may use Google Analytics, Google Search Console, keyword/search data, and engagement or lead information to help prioritize content gaps.
 
 ## Chapter 3: Complete Your SQL Foundation
 
@@ -403,41 +395,44 @@ FROM leads;
 
 - This query returns each unique country from the `leads` table.
 - The alias `lead_countries` makes the output easier to understand in a report.
-- This could help a marketing team quickly identify the geographic markets represented in its lead database.
+- This could help identify the geographic markets represented in a lead database.
 
 ### CEP Application
 
-These concepts could be useful in a digital marketing or CEP project when I need to understand the categories that exist in a dataset.
+`DISTINCT` could be useful in my CEP for identifying the categories that exist in website, search, or lead data before I begin comparing performance.
 
 For example, I could use `DISTINCT` to identify:
 
-- unique marketing channels;
-- unique lead locations;
-- unique campaign platforms;
-- unique customer segments; or
-- unique traffic sources.
+- unique website locations;
+- unique service-page categories;
+- unique search queries or keyword groups;
+- unique traffic sources;
+- unique landing pages; or
+- unique geographic areas.
 
-This can help me understand the structure of a dataset before conducting deeper analysis.
+This may be particularly useful because my project includes location-specific content and recognizes that the same content priorities may not apply equally to San Gabriel and Chino Hills.
 
-Column aliases could also make CEP outputs easier to read by giving result columns more descriptive names.
+Aliases using `AS` could also make outputs easier to understand when I prepare tables or results for the group. For example, a column could be renamed to `unique_locations`, `service_pages`, or `traffic_sources` without changing the original database.
 
-For example, instead of displaying a generic column such as `country`, I could use an alias such as `lead_countries` to make the meaning of the result clearer.
-
-Understanding SQL flavors is also useful because marketing data may be stored in different database systems.
-
-Finally, understanding client-server architecture helps explain how SQL fits into real analytics workflows. A marketing analyst may use a client such as the BigQuery web console to connect to a database service, run queries, and retrieve shared data for analysis.
+These techniques could help me organize data before comparing it with my structured content audit. My progress report proposes evaluating whether important information is present, understandable, reliable, and useful for patient decisions, then using SEO and available engagement or lead data to help prioritize the identified gaps.
 
 # Overall Reflection and Future Reference
 
-The most useful skills I learned in this course were how to retrieve specific data with `SELECT`, sort results with `ORDER BY`, limit the number of returned rows with `LIMIT`, find unique values with `DISTINCT`, and improve output readability with column aliases using `AS`. These commands gave me a basic foundation for answering practical questions with data.
+The most useful skills I learned in this course were using `SELECT` to retrieve specific information, `ORDER BY` to rank results, `LIMIT` to focus on a smaller set of records, `DISTINCT` to identify unique categories, and `AS` to create clearer output names. These commands showed me how SQL can reduce a large dataset to the specific records and variables needed to answer a question.
 
-The concepts I found most challenging were remembering the correct order of SQL clauses and understanding how different commands work together in one query. I also needed some practice distinguishing between ascending and descending sorting and understanding how query results are temporary rather than changes to the original database.
+The concepts I found most challenging were remembering the correct order of SQL clauses and understanding how several commands work together in one query. I also needed some practice deciding when ascending or descending sorting was appropriate. Another important concept was learning that a `SELECT` query creates a temporary result and does not change the original database, which makes it useful for exploring data safely.
 
-SQL could support digital marketing analytics by helping me retrieve and organize campaign, lead, conversion, customer, and website data before further analysis. For customer insights or survey research, SQL could help filter records, identify unique groups, and prepare datasets for analysis. For my CEP, SQL could be useful for pulling relevant marketing data from a database and then analyzing it further in tools such as Excel, R, or other analytics software.
+The course also helped me see how SQL could fit into my CEP. My project focuses on evaluating PhD Orthodontics’ existing website content and identifying content gaps across services and locations. The gaps will ultimately be prioritized using patient information needs, business priorities, SEO opportunities, and available performance data.
 
-In the future, I expect to review commands such as `SELECT`, `ORDER BY`, `LIMIT`, `DISTINCT`, and `AS`, especially when combining multiple clauses in a single query. I also expect to review SQL syntax and database concepts as I continue learning BigQuery and more advanced SQL topics.
+If the relevant data become available, SQL could help me work with sources such as Google Analytics, Google Search Console, search and keyword data, and engagement or lead information. For example, I could select specific page-level or search-level variables, sort records by performance measures, identify unique page or location categories, and narrow the results to records that require closer review.
+
+This could help connect quantitative digital-performance data with my patient-centered content audit. My current approach is to treat content quality and patient information needs should be evaluated separately, while SEO and performance data can help prioritize which gaps deserve attention.
+
+I also need to be careful not to assume that better website content will automatically create more consultation inquiries. My current CEP evidence supports using website content to improve patient information and provider evaluation, but it does not establish a direct causal relationship between improved content and consultation behavior.
+
+In the future, I expect to review `SELECT`, `ORDER BY`, `LIMIT`, `DISTINCT`, and `AS`, especially when I need to combine several clauses in one query. I also expect to review SQL syntax and continue learning BigQuery and more advanced SQL techniques, because later commands may help me combine website, search, engagement, and lead data for more detailed CEP analysis.
 
 # Appendix: Publication Links
 
-- GitHub Repository
-- Published Introduction to SQL Report
+- [GitHub Repository](https://github.com/Sheilaaa0312/ibm-6500-sql-learning-portfolio)
+- [Published Introduction to SQL Report](https://sheilaaa0312.github.io/ibm-6500-sql-learning-portfolio/introduction-to-sql.html)
