@@ -1,0 +1,25 @@
+---
+title: "IBM 6500 SQL Learning Portfolio"
+author: "Xueying Luo"
+date: today
+format:
+  html:
+    toc: false
+    theme: cosmo
+    smooth-scroll: true
+    embed-resources: true
+editor: visual
+---
+
+# IBM 6500 SQL Learning Portfolio
+
+**Student:** Xueying Luo\
+**Course:** IBM 6500
+
+This portfolio contains my DataCamp course-completion evidence and learning notes for SQL and BigQuery. It serves as a reference for future coursework and the MSDM Culminating Experience Project (CEP).
+
+## Reports
+
+- [Introduction to SQL](introduction-to-sql.html)
+- Introduction to BigQuery *(to be completed)*
+- Intermediate SQL *(to be completed)*

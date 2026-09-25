@@ -1,0 +1,443 @@
+---
+title: "Introduction to SQL: Course Completion and Learning Notes"
+author: "Xueying Luo"
+date: today
+
+format:
+  html:
+    toc: true
+    toc-title: "Contents"
+    toc-depth: 3
+    toc-expand: 1
+    toc-location: right-body
+    number-sections: true
+
+editor: visual
+
+execute:
+  enabled: false
+  freeze: auto
+---
+
+# Course-Completion Evidence
+
+![DataCamp Introduction to SQL Certificate](images/introduction-to-sql-certificate.png){#fig-certification}
+
+I completed the DataCamp **Introduction to SQL** course on Sep 20, 2026. This certificate confirms my completion of the assigned course through the IBM 6500 DataCamp classroom.
+
+# Learning Notes and Key Takeaways
+
+## Chapter 1: Meet Databases & SQL
+
+### Main Ideas
+
+#### Databases
+
+A database is a system used to manage data. It allows data to be stored reliably, retrieved efficiently, and manipulated in an organized way.
+
+![](images/Databases-1.png)
+
+Databases are used by many websites, mobile applications, and software systems. They also support data analysis and reporting. For example, in digital marketing, a database can store information about campaigns, leads, conversions, customers, and marketing channels.
+
+Relational databases organize data into separate tables. Each table usually represents a particular type of entity or event, such as campaigns, customers, products, orders, or leads.
+
+![](images/Databases-2.png)
+
+#### Tables, Rows, and Columns
+
+Data in a relational database is organized into tables made up of rows and columns.
+
+- A **row** represents one individual entity, event, or complete record.
+- A row may also be called a **record** or **observation**.
+- A **column** represents one specific attribute or property.
+- A column may also be called a **field** or **attribute**.
+
+For example, in a leads table, one row may represent one lead, while columns may include `lead_id`, `first_name`, `last_name`, `email`, and `country`.
+
+Database tables can look similar to Excel or Google Sheets, but databases are designed to work with much larger amounts of data, support multiple users, and provide data directly to applications.
+
+#### SQL Basics
+
+SQL stands for **Structured Query Language**. It is widely used for working with data stored in databases.
+
+A piece of SQL code used to request information from a database is called a **query**. The database processes the query and returns the requested results.
+
+SQL is more focused than general-purpose programming languages because it is mainly designed for working with data. This makes it useful for retrieving, filtering, organizing, and analyzing information stored in databases.
+
+### Important SQL Syntax
+
+The first chapter mainly introduces the concepts behind SQL. The most important terms introduced were:
+
+- `SQL`: Structured Query Language
+- `query`: a request for information from a database
+- `table`: a structure that organizes related data
+- `row`: one record or observation
+- `column`: one attribute or field
+
+### SQL Example
+
+``` sql
+SELECT first_name,
+       last_name,
+       country
+FROM leads;
+```
+
+- This query requests the `first_name`, `last_name`, and `country` columns from the `leads` table.
+- Each row in the result represents one lead, while each selected column represents one specific attribute of that lead.
+- This example shows the basic relationship between SQL and a relational database: SQL is used to ask the database for specific information stored in its tables.
+
+### CEP Application
+
+These concepts are useful for digital marketing analytics because marketing data is often stored in databases.
+
+For example, a marketing database could contain separate tables for:
+
+- campaigns;
+- leads;
+- customers;
+- conversions;
+- marketing channels; and
+- website or transaction activity.
+
+In a CEP or marketing analytics project, SQL could help me retrieve specific data. For example, I could use SQL to retrieve lead information, campaign performance, or conversion data from a database and then use the results for further analysis and reporting.
+
+## Chapter 2: Write Your First SQL Queries
+
+### Main Ideas
+
+#### Selecting Columns
+
+The `SELECT` statement is used to choose which columns to retrieve from a table, while `FROM` identifies the table where the data is stored.
+
+A query can return one column, multiple columns, or all columns from a table.
+
+- `SELECT column_1` retrieves one column.
+- `SELECT column_1, column_2` retrieves multiple columns.
+- `SELECT *` retrieves every column in the table.
+
+For example, if I only need campaign names, I can select the `campaign_name` column instead of returning the entire campaigns table.
+
+#### Sorting Results
+
+The `ORDER BY` clause is used to sort query results based on a specific column.
+
+By default, `ORDER BY` sorts in ascending order.
+
+- Ascending order: lowest to highest, or A to Z.
+- Descending order: highest to lowest, or Z to A.
+
+The keyword `DESC` is added when descending order is needed.
+
+Sorting is useful when comparing marketing performance. For example, campaigns can be sorted by impressions to identify the campaigns with the greatest reach.
+
+#### Limiting Rows
+
+The `LIMIT` clause restricts how many rows are returned by a query.
+
+It is placed at the end of the SQL query.
+
+Using `LIMIT` is useful because it can prevent a query from returning more data than expected. This can make queries faster and reduce the risk of working with unnecessarily large results.
+
+For example, `LIMIT 5` can be used to return only the first five rows produced by the query.
+
+#### Temporary Query Results
+
+Running a `SELECT` query does not change the original database.
+
+The result of a query is a temporary table containing only the data that matches the instructions in the query.
+
+This result is not automatically saved. If I want to keep the result for future use, I need to save it to my computer or cloud storage.
+
+#### Error Handling
+
+SQL syntax needs to be written precisely. Small mistakes, such as misspelled column names, missing punctuation, or incorrect clause placement, can cause a query to fail.
+
+When an error occurs, useful troubleshooting steps include:
+
+- reading the error message carefully;
+- checking table and column names;
+- checking SQL spelling and syntax;
+- reviewing clause order; and
+- using a development environment or AI assistance when needed.
+
+With more practice, SQL errors become easier to recognize and fix.
+
+### Important SQL Syntax
+
+#### Selecting One Column
+
+``` sql
+SELECT column_1
+FROM table_1;
+```
+
+#### Selecting Multiple Columns
+
+``` sql
+SELECT column_1,
+       column_2
+FROM table_1;
+```
+
+#### Selecting All Columns
+
+``` sql
+SELECT *
+FROM table_1;
+```
+
+#### Sorting in Ascending Order
+
+``` sql
+SELECT column_1,
+       column_2
+FROM table_1
+ORDER BY column_1;
+```
+
+#### Sorting in Descending Order
+
+``` sql
+SELECT column_1,
+       column_2
+FROM table_1
+ORDER BY column_1 DESC;
+```
+
+#### Limiting the Number of Rows
+
+``` sql
+SELECT *
+FROM table_1
+LIMIT 10;
+```
+
+### SQL Examples
+
+#### Example 1: Return All Campaign Information
+
+``` sql
+SELECT *
+FROM campaigns;
+```
+
+- This query returns every column from the `campaigns` table.
+- The `*` symbol means that all available columns should be included in the result.
+- In the lesson, this query returned all campaign records and all campaign-related fields, such as campaign ID, campaign name, channel, budget, platform, performance score, and impressions.
+
+#### Example 2: Sort Campaigns by Impressions
+
+``` sql
+SELECT campaign_id,
+       campaign_name,
+       impressions
+FROM campaigns
+ORDER BY impressions DESC;
+```
+
+- This query returns the campaign ID, campaign name, and impressions for each campaign.
+- `ORDER BY impressions DESC` sorts the campaigns from the highest number of impressions to the lowest.
+- This makes it easier to identify campaigns with the widest reach.
+
+#### Example 3: Find the Ten Lowest-Revenue Conversions
+
+``` sql
+SELECT revenue
+FROM conversions
+ORDER BY revenue
+LIMIT 10;
+```
+
+- This query selects the `revenue` column from the `conversions` table.
+- Because no `DESC` keyword is included, the values are sorted in ascending order, from lowest to highest.
+- `LIMIT 10` returns only the first ten rows, which produces the ten conversions with the lowest revenue.
+
+### CEP Application
+
+These SQL skills could be useful in a CEP project because they allow me to retrieve only the data that is relevant to a specific question.
+
+For example, I could use `SELECT` to retrieve campaign names, channels, impressions, or conversion data from a marketing database.
+
+I could then use `ORDER BY` to identify:
+
+- campaigns with the highest impressions;
+- campaigns with the lowest performance;
+- conversions with the highest revenue; or
+- other high- or low-performing marketing results.
+
+I could also use `LIMIT` to focus on only the top or bottom results instead of reviewing an entire dataset.
+
+For a CEP project, this could help me quickly identify important records before conducting further analysis in tools such as Excel, R, or other analytics software.
+
+## Chapter 3: Complete Your SQL Foundation
+
+### Main Ideas
+
+#### Finding Unique Values
+
+The `DISTINCT` keyword is used to return only unique values from a column and remove duplicate results.
+
+It is placed immediately after `SELECT`.
+
+For example, if the `channel` column contains repeated values such as Display, Search, Email, and Social Media, `DISTINCT` can return each channel only once.
+
+This is useful when I want to understand the different categories that exist in a dataset without seeing repeated values.
+
+#### Column Aliasing
+
+The `AS` keyword is used to give a temporary name to a column in the query result.
+
+An alias changes only the displayed column name. It does not rename the original column in the database.
+
+Aliases are useful because they make query results easier to read and understand.
+
+Good aliases should be:
+
+- descriptive;
+- consistent;
+- easy to understand; and
+- written in `snake_case`.
+
+For example, the column `channel` can be displayed as `unique_channels`.
+
+#### SQL Style Conventions
+
+SQL keywords can be written in uppercase or lowercase, but a common convention is to write keywords in uppercase.
+
+Examples include:
+
+- `SELECT`
+- `FROM`
+- `DISTINCT`
+- `AS`
+- `ORDER BY`
+- `LIMIT`
+
+Using uppercase keywords makes SQL code easier to scan because the commands stand out from table names and column names.
+
+#### SQL Flavors
+
+Different database systems use slightly different versions, or flavors, of SQL.
+
+The core concepts are similar across systems, but some syntax may differ.
+
+Examples of database systems mentioned in the lesson include:
+
+- BigQuery;
+- PostgreSQL;
+- MySQL;
+- SQL Server; and
+- Snowflake.
+
+For example, BigQuery, PostgreSQL, and MySQL can use `LIMIT 10`, while SQL Server commonly uses `TOP(10)`.
+
+The important idea is that SQL knowledge transfers well across systems because the main concepts and structure remain similar.
+
+#### Client-Server Architecture
+
+A database system often follows a client-server architecture.
+
+The **database server** stores and manages the database and processes queries.
+
+The **database client** is the software or interface used to connect to the database server, send SQL queries, and display the returned results.
+
+For BigQuery, the BigQuery web console can act as the client interface.
+
+Multiple users or tools can connect to the same database server, depending on their access permissions.
+
+### Important SQL Syntax
+
+#### Return Unique Values
+
+``` sql
+SELECT DISTINCT column_name
+FROM table_name;
+```
+
+#### Create a Column Alias
+
+``` sql
+SELECT column_1 AS alias_name,
+       column_2
+FROM table_1;
+```
+
+#### Combine `DISTINCT` and `AS`
+
+``` sql
+SELECT DISTINCT column_name AS alias_name
+FROM table_name;
+```
+
+### SQL Examples
+
+#### Example 1: Find Unique Marketing Channels
+
+``` sql
+SELECT DISTINCT channel
+FROM campaigns;
+```
+
+- This query returns each unique value from the `channel` column in the `campaigns` table.
+- Without `DISTINCT`, the same channel could appear multiple times because many campaigns may use the same marketing channel.
+- With `DISTINCT`, each channel is returned only once.
+
+#### Example 2: Rename the Unique Channel Column
+
+``` sql
+SELECT DISTINCT channel AS unique_channels
+FROM campaigns;
+```
+
+- This query returns the same set of unique channels, but the output column is displayed as `unique_channels`.
+- The alias improves readability and makes it clearer that the result contains unique marketing channels.
+- The original `channel` column in the database is not changed.
+
+#### Example 3: Find Unique Lead Countries
+
+``` sql
+SELECT DISTINCT country AS lead_countries
+FROM leads;
+```
+
+- This query returns each unique country from the `leads` table.
+- The alias `lead_countries` makes the output easier to understand in a report.
+- This could help a marketing team quickly identify the geographic markets represented in its lead database.
+
+### CEP Application
+
+These concepts could be useful in a digital marketing or CEP project when I need to understand the categories that exist in a dataset.
+
+For example, I could use `DISTINCT` to identify:
+
+- unique marketing channels;
+- unique lead locations;
+- unique campaign platforms;
+- unique customer segments; or
+- unique traffic sources.
+
+This can help me understand the structure of a dataset before conducting deeper analysis.
+
+Column aliases could also make CEP outputs easier to read by giving result columns more descriptive names.
+
+For example, instead of displaying a generic column such as `country`, I could use an alias such as `lead_countries` to make the meaning of the result clearer.
+
+Understanding SQL flavors is also useful because marketing data may be stored in different database systems.
+
+Finally, understanding client-server architecture helps explain how SQL fits into real analytics workflows. A marketing analyst may use a client such as the BigQuery web console to connect to a database service, run queries, and retrieve shared data for analysis.
+
+# Overall Reflection and Future Reference
+
+The most useful skills I learned in this course were how to retrieve specific data with `SELECT`, sort results with `ORDER BY`, limit the number of returned rows with `LIMIT`, find unique values with `DISTINCT`, and improve output readability with column aliases using `AS`. These commands gave me a basic foundation for answering practical questions with data.
+
+The concepts I found most challenging were remembering the correct order of SQL clauses and understanding how different commands work together in one query. I also needed some practice distinguishing between ascending and descending sorting and understanding how query results are temporary rather than changes to the original database.
+
+SQL could support digital marketing analytics by helping me retrieve and organize campaign, lead, conversion, customer, and website data before further analysis. For customer insights or survey research, SQL could help filter records, identify unique groups, and prepare datasets for analysis. For my CEP, SQL could be useful for pulling relevant marketing data from a database and then analyzing it further in tools such as Excel, R, or other analytics software.
+
+In the future, I expect to review commands such as `SELECT`, `ORDER BY`, `LIMIT`, `DISTINCT`, and `AS`, especially when combining multiple clauses in a single query. I also expect to review SQL syntax and database concepts as I continue learning BigQuery and more advanced SQL topics.
+
+# Appendix: Publication Links
+
+- GitHub Repository
+- Published Introduction to SQL Report
