@@ -23,7 +23,7 @@ execute:
 
 ![DataCamp Introduction to SQL Certificate](images/introduction-to-sql-certificate.png){#fig-certification}
 
-I completed the DataCamp **Introduction to SQL** course on Sep 20, 2026. This certificate confirms my completion of the assigned course through the IBM 6500 DataCamp classroom.
+I completed the DataCamp Introduction to SQL course on Sep 20, 2026. This certificate (@fig-certification) confirms my completion of the assigned course through the IBM 6500 DataCamp classroom.
 
 # Learning Notes and Key Takeaways
 
@@ -52,9 +52,7 @@ Data in a relational database is organized into tables made up of rows and colum
 - A **column** represents one specific attribute or property.
 - A column may also be called a **field** or **attribute**.
 
-For example, in a leads table, one row may represent one lead, while columns may include `lead_id`, `first_name`, `last_name`, `email`, and `country`.
-
-Database tables can look similar to Excel or Google Sheets, but databases are designed to work with much larger amounts of data, support multiple users, and provide data directly to applications.
+For example, in a leads table, one row may represent one lead, while columns may include `lead_id`, `first_name`, `last_name`, `email`, and `country`. Database tables can look similar to Excel or Google Sheets, but databases are designed to work with much larger amounts of data, support multiple users, and provide data directly to applications.
 
 #### SQL Basics
 
@@ -66,13 +64,27 @@ SQL is more focused than general-purpose programming languages because it is mai
 
 ### Important SQL Syntax
 
-The first chapter mainly introduces the concepts behind SQL. The most important terms introduced were:
+::: panel-tabset
+## SQL
 
-- `SQL`: Structured Query Language
-- `query`: a request for information from a database
-- `table`: a structure that organizes related data
-- `row`: one record or observation
-- `column`: one attribute or field
+structured Query Language
+
+## query
+
+a request for information from a database
+
+## table
+
+a structure that organizes related data
+
+## row
+
+one record or observation
+
+## column
+
+one attribute or field
+:::
 
 ### SQL Example
 
@@ -85,17 +97,15 @@ FROM leads;
 
 - This query requests the `first_name`, `last_name`, and `country` columns from the `leads` table.
 - Each row in the result represents one lead, while each selected column represents one specific attribute of that lead.
-- This example shows the basic relationship between SQL and a relational database: SQL is used to ask the database for specific information stored in its tables.
+- SQL is used to ask the database for specific information stored in its tables.
 
 ### CEP Application
 
-The concepts in this chapter are directly relevant to my CEP because the project involves reviewing and analyzing information from multiple sources, including the PhD Orthodontics website and potentially website analytics, search data, and lead information.
+The concepts is useful for my CEP because the project involves reviewing and analyzing information from the PhD Orthodontics website and potentially website analytics, search data, and lead information.
 
 Understanding how databases organize data into tables, rows, and columns helps me think about how different types of CEP data could be structured. For example, one table could contain website pages, another could contain search-performance data, and another could contain lead or engagement information.
 
 A row could represent one website page, one search query, or one lead, while columns could contain attributes such as page title, location, traffic source, impressions, clicks, engagement, or other performance measures.
-
-This basic database structure could help me organize CEP data more systematically before comparing website-content findings with available digital-performance data.
 
 ## Chapter 2: Write Your First SQL Queries
 
@@ -128,13 +138,7 @@ Sorting is useful when comparing performance. For example, records can be sorted
 
 #### Limiting Rows
 
-The `LIMIT` clause restricts how many rows are returned by a query.
-
-It is placed at the end of the SQL query.
-
-Using `LIMIT` is useful because it can prevent a query from returning more data than expected. This can make queries faster and reduce the risk of working with unnecessarily large results.
-
-For example, `LIMIT 5` can be used to return only the first five rows produced by the query.
+The `LIMIT` clause restricts how many rows are returned by a query. It is placed at the end of the SQL query. Using `LIMIT` is useful because it can prevent a query from returning more data than expected. This can make queries faster and reduce the risk of working with unnecessarily large results. For example, `LIMIT 5` can be used to return only the first five rows produced by the query.
 
 #### Temporary Query Results
 
@@ -142,7 +146,9 @@ Running a `SELECT` query does not change the original database.
 
 The result of a query is a temporary table containing only the data that matches the instructions in the query.
 
+::: callout-note
 This result is not automatically saved. If I want to keep the result for future use, I need to save it to my computer or cloud storage.
+:::
 
 #### Error Handling
 
@@ -233,7 +239,6 @@ ORDER BY impressions DESC;
 
 - This query returns the campaign ID, campaign name, and impressions for each campaign.
 - `ORDER BY impressions DESC` sorts the campaigns from the highest number of impressions to the lowest.
-- This makes it easier to identify campaigns with the widest reach.
 
 #### Example 3: Find the Ten Lowest-Revenue Conversions
 
@@ -250,9 +255,7 @@ LIMIT 10;
 
 ### CEP Application
 
-These SQL skills could support the prioritization stage of my CEP.
-
-My analytics objective is to identify and prioritize website content gaps based on patient information needs, business priorities, SEO opportunities, and available performance data. SQL could help me retrieve only the variables that are relevant to a specific part of that analysis.
+My AO is to identify and prioritize website content gaps based on patient information needs, business priorities, SEO opportunities, and available performance data. SQL could help me retrieve only the variables that are relevant to a specific part of that analysis.
 
 For example, if website or search-performance data are available, I could use `SELECT` to retrieve fields such as page name, location, impressions, clicks, engagement, or lead-related measures.
 
@@ -268,21 +271,11 @@ This would be especially useful because my CEP may use Google Analytics, Google 
 
 #### Finding Unique Values
 
-The `DISTINCT` keyword is used to return only unique values from a column and remove duplicate results.
-
-It is placed immediately after `SELECT`.
-
-For example, if the `channel` column contains repeated values such as Display, Search, Email, and Social Media, `DISTINCT` can return each channel only once.
-
-This is useful when I want to understand the different categories that exist in a dataset without seeing repeated values.
+The `DISTINCT` keyword is used to return only unique values from a column and remove duplicate results. It is placed immediately after `SELECT`. For example, if the `channel` column contains repeated values such as Display, Search, Email, and Social Media, `DISTINCT` can return each channel only once. This is useful when I want to understand the different categories that exist in a dataset without seeing repeated values.
 
 #### Column Aliasing
 
-The `AS` keyword is used to give a temporary name to a column in the query result.
-
-An alias changes only the displayed column name. It does not rename the original column in the database.
-
-Aliases are useful because they make query results easier to read and understand.
+The `AS` keyword is used to give a temporary name to a column in the query result. An alias changes only the displayed column name. It does not rename the original column in the database. Aliases are useful because they make query results easier to read and understand.
 
 Good aliases should be:
 
@@ -310,9 +303,7 @@ Using uppercase keywords makes SQL code easier to scan because the commands stan
 
 #### SQL Flavors
 
-Different database systems use slightly different versions, or flavors, of SQL.
-
-The core concepts are similar across systems, but some syntax may differ.
+Different database systems use slightly different versions, or flavors, of SQL. The core concepts are similar across systems, but some syntax may differ.
 
 Examples of database systems mentioned in the lesson include:
 
@@ -323,8 +314,6 @@ Examples of database systems mentioned in the lesson include:
 - Snowflake.
 
 For example, BigQuery, PostgreSQL, and MySQL can use `LIMIT 10`, while SQL Server commonly uses `TOP(10)`.
-
-The important idea is that SQL knowledge transfers well across systems because the main concepts and structure remain similar.
 
 #### Client-Server Architecture
 
@@ -395,7 +384,6 @@ FROM leads;
 
 - This query returns each unique country from the `leads` table.
 - The alias `lead_countries` makes the output easier to understand in a report.
-- This could help identify the geographic markets represented in a lead database.
 
 ### CEP Application
 
@@ -410,7 +398,7 @@ For example, I could use `DISTINCT` to identify:
 - unique landing pages; or
 - unique geographic areas.
 
-This may be particularly useful because my project includes location-specific content and recognizes that the same content priorities may not apply equally to San Gabriel and Chino Hills.
+This may be useful because my project includes location-specific content and recognizes that the same content priorities may not apply equally to San Gabriel and Chino Hills.
 
 Aliases using `AS` could also make outputs easier to understand when I prepare tables or results for the group. For example, a column could be renamed to `unique_locations`, `service_pages`, or `traffic_sources` without changing the original database.
 
@@ -418,15 +406,15 @@ These techniques could help me organize data before comparing it with my structu
 
 # Overall Reflection and Future Reference
 
-The most useful skills I learned in this course were using `SELECT` to retrieve specific information, `ORDER BY` to rank results, `LIMIT` to focus on a smaller set of records, `DISTINCT` to identify unique categories, and `AS` to create clearer output names. These commands showed me how SQL can reduce a large dataset to the specific records and variables needed to answer a question.
+The most useful skills I learned in this course were using `SELECT` to retrieve specific information, `ORDER BY` to rank results, `LIMIT` to focus on a smaller set of records, `DISTINCT` to identify unique categories, and `AS` to create clearer output names.
 
 The concepts I found most challenging were remembering the correct order of SQL clauses and understanding how several commands work together in one query. I also needed some practice deciding when ascending or descending sorting was appropriate. Another important concept was learning that a `SELECT` query creates a temporary result and does not change the original database, which makes it useful for exploring data safely.
 
 The course also helped me see how SQL could fit into my CEP. My project focuses on evaluating PhD Orthodontics’ existing website content and identifying content gaps across services and locations. The gaps will ultimately be prioritized using patient information needs, business priorities, SEO opportunities, and available performance data.
 
-If the relevant data become available, SQL could help me work with sources such as Google Analytics, Google Search Console, search and keyword data, and engagement or lead information. For example, I could select specific page-level or search-level variables, sort records by performance measures, identify unique page or location categories, and narrow the results to records that require closer review.
+If the relevant data become available, SQL could help me work with various sources. For example, I could select specific page-level or search-level variables, sort records by performance measures, identify unique page or location categories, and narrow the results to records that require closer review.
 
-This could help connect quantitative digital-performance data with my patient-centered content audit. My current approach is to treat content quality and patient information needs should be evaluated separately, while SEO and performance data can help prioritize which gaps deserve attention.
+This could help connect quantitative digital-performance data with my patient-centered content audit. My current approach is to treat content quality and patient information needs should be evaluated separately, while AO2 and AO5 can help prioritize which gaps deserve attention.
 
 I also need to be careful not to assume that better website content will automatically create more consultation inquiries. My current CEP evidence supports using website content to improve patient information and provider evaluation, but it does not establish a direct causal relationship between improved content and consultation behavior.
 
