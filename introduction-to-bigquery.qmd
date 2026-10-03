@@ -378,4 +378,4 @@ For digital marketing and my CEP, BigQuery could help combine website, search, a
 # Appendix: Publication Links
 
 - [GitHub Repository](https://github.com/Sheilaaa0312/ibm-6500-sql-learning-portfolio)
-- Published Introduction to BigQuery Report
+- [Published Introduction to BigQuery Report](https://sheilaaa0312.github.io/ibm-6500-sql-learning-portfolio/introduction-to-bigquery.html)
