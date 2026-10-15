@@ -1,0 +1,773 @@
+---
+title: "Intermediate SQL: Course Completion and Learning Notes"
+author: "Xueying Luo"
+date: today
+
+format:
+  html:
+    toc: true
+    toc-title: "Contents"
+    toc-depth: 3
+    toc-expand: 1
+    toc-location: right-body
+    number-sections: true
+    smooth-scroll: true
+    embed-resources: true
+
+editor: visual
+
+execute:
+  enabled: false
+  freeze: auto
+---
+
+# Course-Completion Evidence
+
+![DataCamp Intermediate SQL Certificate](images/DataCamp%20Intermediate%20SQL%20Certificate.png){#fig-certification}
+
+I completed the DataCamp Intermediate SQL course by October 14, 2026.
+
+# Learning Notes and Key Takeaways
+
+This course covered aggregation, transformation, filtering, and conditional operations. These notes include examples from my practice with orders, trips, companies, and flights. I also included possible uses for my AO3 content work in the PhD Orthodontics project.
+
+## Chapter 1: Data Aggregation
+
+### Main Ideas
+
+#### Summary Values
+
+Aggregate functions summarize several rows. In the order exercises, I used them to find the smallest order, average order amount, total revenue, and number of orders.
+
+The different forms of `COUNT()` answer different questions:
+
+- `COUNT(*)` counts all rows.
+- `COUNT(user_id)` counts rows with a recorded user ID.
+- `COUNT(DISTINCT user_id)` counts different users with recorded IDs.
+
+For example, one customer could place three orders. That would count as three orders but only one unique customer.
+
+`SUM()`, `AVG()`, `MIN()`, and `MAX()` ignore missing values. If the amounts are 10, 20, and `NULL`, the average is 15. The missing amount is not included as zero.
+
+#### One Grouping Column
+
+`GROUP BY` creates a separate summary for each category.
+
+Without grouping, a query can return total revenue for the whole table. With `GROUP BY category`, it returns revenue for each category.
+
+The result changes from one overall row to one row per category.
+
+#### Multiple Grouping Columns
+
+Grouping by more than one column gives a summary for each combination.
+
+For example, `GROUP BY location, category` separates orders by both location and category. The same location can appear several times because it may have orders in several categories.
+
+One point I need to remember is that grouping only by `location` is not enough if I also select `category`. SQL needs to know which category belongs in each result row.
+
+### Important SQL Syntax
+
+| Syntax                        | What it does                               |
+|:-----------------------------------|:-----------------------------------|
+| `COUNT(*)`                    | Counts rows.                               |
+| `COUNT(DISTINCT user_id)`     | Counts unique users with recorded IDs.     |
+| `SUM(amount)`                 | Adds the recorded amounts.                 |
+| `AVG(amount)`                 | Calculates the average recorded amount.    |
+| `MIN(amount)`                 | Finds the smallest amount.                 |
+| `MAX(amount)`                 | Finds the largest amount.                  |
+| `GROUP BY category`           | Calculates a summary for each category.    |
+| `GROUP BY location, category` | Calculates a summary for each combination. |
+| `ORDER BY total_revenue DESC` | Lists the highest revenue first.           |
+
+### When to Use It
+
+I would use aggregation when the question asks for a total, average, count, minimum, or maximum.
+
+I would add grouping when I need to compare those measures across categories. Before writing the query, I should decide whether the result needs one overall row, one row per category, or one row per combination.
+
+### SQL Examples and Explanations
+
+The following examples use an `orders` table with one row per order. The columns include `order_id`, `user_id`, `category`, and `amount`. The last example also assumes a `location` column.
+
+#### Example 1: Summarize Orders
+
+``` sql
+SELECT
+    COUNT(*) AS total_orders,
+    COUNT(DISTINCT user_id) AS unique_customers,
+    SUM(amount) AS total_revenue,
+    ROUND(AVG(amount), 2) AS average_order_amount,
+    MIN(amount) AS smallest_order,
+    MAX(amount) AS largest_order
+FROM orders;
+```
+
+This query returns one row with six summary measures.
+
+If the order amounts were 50, 100, and 150, total revenue would be 300 and the average would be 100. The smallest order would be 50, and the largest would be 150.
+
+`ROUND(..., 2)` rounds the average to two decimal places.
+
+#### Example 2: Calculate Five Trip Metrics
+
+One exercise asked for total trips, unique riders, unique drivers, total fare, and average fare in one query.
+
+This example assumes that `trips` contains `rider_id`, `driver_id`, and `fare`, with one row per trip.
+
+``` sql
+SELECT
+    COUNT(*) AS total_trips,
+    COUNT(DISTINCT rider_id) AS unique_riders,
+    COUNT(DISTINCT driver_id) AS unique_drivers,
+    SUM(fare) AS total_fare,
+    AVG(fare) AS average_fare
+FROM trips;
+```
+
+The query returns one overall row. A rider who takes several trips appears several times in the trip count but only once in the unique-rider count.
+
+To check which ride types appear in the data, I would use:
+
+``` sql
+SELECT DISTINCT ride_type
+FROM trips;
+```
+
+This lists the different ride types. It does not calculate a count or summarize fares.
+
+#### Example 3: Group Orders by Category
+
+``` sql
+SELECT
+    category,
+    COUNT(*) AS total_orders,
+    SUM(amount) AS total_revenue
+FROM orders
+GROUP BY category
+ORDER BY total_revenue DESC;
+```
+
+Each result row represents one category. The query counts its orders, adds its order amounts, and places the category with the highest revenue first.
+
+#### Example 4: Group by Location and Category
+
+``` sql
+SELECT
+    location,
+    category,
+    COUNT(*) AS total_orders,
+    SUM(amount) AS total_revenue
+FROM orders
+GROUP BY location, category
+ORDER BY location, total_revenue DESC;
+```
+
+Each row now represents one location and category combination.
+
+Both `location` and `category` appear in `GROUP BY` because neither column is being summarized with an aggregate function.
+
+### CEP Application
+
+For AO3, I could group available session data by landing page to see which service pages receive more visits. Adding a second grouping column, such as traffic channel, could show whether those visits mainly come from organic search or paid search. This would give me context for the content audit. A page with little traffic may need a different review from a page that receives visits but leaves important patient questions unanswered.
+
+## Chapter 2: Data Transformation
+
+### Main Ideas
+
+#### Basic Transformations
+
+Transformations create new values from existing columns. For example, clicks and impressions can be used to calculate click-through rate, even if the original table does not have a rate column.
+
+Text functions can also make labels consistent. In practice, I used `LOWER()` to change category names to lowercase. `TRIM()` removes spaces from the beginning and end of text.
+
+For example, `LOWER(TRIM(channel))` changes `Organic Search` and the same label with extra outer spaces to `organic search`.
+
+Using `AS` gives the new result a name. It does not rename the original column in the database.
+
+#### Complex Transformations
+
+A percentage of total compares one value with the sum of all relevant values.
+
+The denominator needs to be the overall total, rather than the value from the current row. A subquery can calculate that total and supply it to the outer query.
+
+A CTE is useful when a calculation needs several steps. I can prepare a result with `WITH` and then use it in the final query.
+
+Another point is division by zero. `NULLIF(denominator, 0)` returns `NULL` when the denominator is zero. The calculated rate is then missing rather than an invalid division.
+
+### Important SQL Syntax
+
+| Syntax | What it does |
+|:---|:---|
+| `+`, `-`, `*`, `/` | Performs arithmetic. |
+| `LOWER(column_name)` | Changes text to lowercase. |
+| `TRIM(column_name)` | Removes spaces from the beginning and end. |
+| `ROUND(expression, 2)` | Rounds a result to two decimal places. |
+| `NULLIF(value, 0)` | Returns `NULL` if the value is zero. |
+| `(SELECT SUM(value) FROM table_name)` | Calculates an overall total. |
+| `WITH prepared AS (...)` | Names a preparation step within a query. |
+
+### When to Use It
+
+I would use transformations when the data contains the inputs but not the measure I need.
+
+For example, campaign data may contain spend and clicks but no cost-per-click column. A transformation lets me calculate that measure directly.
+
+Text transformations are useful before grouping labels that differ only in capitalization or extra spaces.
+
+### SQL Examples and Explanations
+
+#### Example 1: Calculate Click-Through Rate and Cost per Click
+
+The hypothetical `campaign_daily` table has one row per campaign per day. It includes `campaign_id`, `channel`, `impressions`, `clicks`, and `spend`.
+
+``` sql
+SELECT
+    campaign_id,
+    LOWER(TRIM(channel)) AS channel_clean,
+    ROUND(
+      100.0 * clicks / NULLIF(impressions, 0),
+      2
+    ) AS ctr_pct,
+    ROUND(
+      1.0 * spend / NULLIF(clicks, 0),
+      2
+    ) AS cost_per_click
+FROM campaign_daily;
+```
+
+If a row contains 1,000 impressions, 50 clicks, and 40 in spend, the click-through rate is 5.00% and the cost per click is 0.80.
+
+Multiplying by `100.0` expresses the rate as a percentage. Decimal values also help avoid integer division in SQL systems that truncate integer results.
+
+If impressions are zero, the rate is `NULL`. This means it cannot be calculated from that row, rather than that the rate is zero.
+
+#### Example 2: Calculate Percentage of Total
+
+Here, `category_sales` is a prepared table with one row per category and a `revenue` column.
+
+``` sql
+SELECT
+    category,
+    revenue,
+    ROUND(
+      100.0 * revenue
+      / NULLIF(
+          (SELECT SUM(revenue) FROM category_sales),
+          0
+        ),
+      2
+    ) AS revenue_pct_of_total
+FROM category_sales;
+```
+
+The subquery calculates total revenue across the table. Each category's revenue is divided by that same total.
+
+If a category has revenue of 200 and the total is 1,000, its share is 20.00%.
+
+In BigQuery, another option is `SAFE_DIVIDE()`:
+
+``` sql
+SELECT
+    category,
+    ROUND(
+      SAFE_DIVIDE(
+        100.0 * revenue,
+        (SELECT SUM(revenue) FROM category_sales)
+      ),
+      2
+    ) AS revenue_pct_of_total
+FROM category_sales;
+```
+
+`SAFE_DIVIDE()` returns `NULL` when division produces an error, such as division by zero. I would check the SQL system before reusing this BigQuery version elsewhere.
+
+#### Example 3: Prepare Totals with a CTE
+
+``` sql
+WITH campaign_totals AS (
+  SELECT
+      campaign_id,
+      SUM(spend) AS total_spend,
+      SUM(clicks) AS total_clicks
+  FROM campaign_daily
+  GROUP BY campaign_id
+)
+SELECT
+    campaign_id,
+    total_spend,
+    total_clicks,
+    ROUND(
+      1.0 * total_spend / NULLIF(total_clicks, 0),
+      2
+    ) AS cost_per_click
+FROM campaign_totals;
+```
+
+The CTE first adds spend and clicks for each campaign. The final query uses those totals to calculate cost per click.
+
+This avoids averaging daily cost-per-click values when days have different numbers of clicks. The spend and click totals should cover the same reporting period and have their missing values checked.
+
+#### Interpreting Negative Percentages
+
+In the margin exercise, Bags and Accessories had negative margins. Those losses reduced the total margin, so the positive categories could account for more than 100% of the net total.
+
+For example, margins of 150 and -50 give a total of 100. Their shares are 150% and -50%, which still add to 100%.
+
+This is why I need to check the underlying values before assuming that a percentage above 100% is a calculation error.
+
+### CEP Application
+
+If reliable session and inquiry data become available, I could calculate an inquiry completion rate for each landing page. The numerator would be sessions with a confirmed inquiry. The denominator would be the eligible sessions for that page. I would need to check the team's tracking definition first. Clicking a consultation button and successfully submitting a consultation form are different actions and should not be counted as the same outcome.
+
+## Chapter 3: Data Filtering
+
+### Main Ideas
+
+#### Basic Filtering
+
+`SELECT` chooses columns, while `WHERE` chooses rows.
+
+For example, selecting `company` and `profit` controls what information appears. Adding `WHERE profit < 0` limits the result to companies with a loss.
+
+The boundary matters. `profit < 0` includes losses, while `profit <= 0` also includes companies that broke even.
+
+Missing values require `IS NULL` or `IS NOT NULL`. I should not use `= NULL`.
+
+Other useful filters include:
+
+- `IN` for matching several listed values;
+- `LIKE` for matching a text pattern;
+- `%` for any sequence of characters in a `LIKE` pattern; and
+- `_` for one character in a `LIKE` pattern.
+
+#### Multiple Conditions
+
+`AND` requires both conditions to be true. `OR` requires at least one to be true.
+
+Parentheses help keep the intended conditions together. For example, I may want companies that are profitable and belong to either Technology or Healthcare.
+
+SQL evaluates `AND` before `OR`, so I should not rely on the visual order of the conditions alone.
+
+#### Complex Filtering
+
+A longer filter can be split into separate flags. This makes it easier to inspect each condition before combining them.
+
+A CTE also lets the final query refer to those new flags. A column alias created in `SELECT` is generally unavailable to `WHERE` in the same query block.
+
+`NOT` finds the opposite of a condition, but it needs care when values are missing. A condition involving `NULL` may be unknown. Applying `NOT` does not automatically make that condition true.
+
+### Important SQL Syntax
+
+``` sql
+SELECT column_name
+FROM table_name
+WHERE condition_1
+  AND (condition_2 OR condition_3);
+```
+
+Other patterns include:
+
+- `column_name IN ('value_1', 'value_2')`
+- `column_name LIKE '%keyword%'`
+- `column_name IS NULL`
+- `NOT (condition)`
+
+`WHERE` filters rows before grouping. `HAVING` filters the grouped results.
+
+### When to Use It
+
+I would use filtering to define which records belong in the analysis.
+
+For example, I might need only arrived flights, profitable companies, visits to a particular service page, or records from one location.
+
+I should check the selected rows before summarizing them. A correct average can still answer the wrong question if the filter includes the wrong records.
+
+### SQL Examples and Explanations
+
+The company examples use the practice table `fortune_50`, including `company`, `sector`, `rank_2025`, `revenue`, and `profit`.
+
+#### Example 1: Filter by Sector
+
+``` sql
+SELECT
+    company,
+    sector,
+    rank_2025,
+    revenue,
+    profit
+FROM fortune_50
+WHERE sector = 'Technology';
+```
+
+This returns the selected columns for companies classified as Technology in the dataset. Text values use single quotes.
+
+To find companies with negative profit instead, I would change the condition to:
+
+``` sql
+WHERE profit < 0
+```
+
+To find missing profit values, I would use:
+
+``` sql
+WHERE profit IS NULL
+```
+
+These two fragments replace the `WHERE` clause in the full query.
+
+#### Example 2: Combine Conditions
+
+``` sql
+SELECT
+    company,
+    rank_2025,
+    profit
+FROM fortune_50
+WHERE rank_2025 <= 10
+  AND profit > 0;
+```
+
+The result includes companies that are both in the top ten of this dataset and profitable.
+
+Replacing `AND` with `OR` would also include profitable companies outside the top ten and top-ten companies without positive profit.
+
+For profitable companies in either of two sectors, I could write:
+
+``` sql
+SELECT
+    company,
+    sector,
+    profit
+FROM fortune_50
+WHERE profit > 0
+  AND (
+    sector = 'Technology'
+    OR sector = 'Healthcare'
+  );
+```
+
+The sector condition could also use `IN ('Technology', 'Healthcare')`.
+
+#### Example 3: Create Separate Filter Flags
+
+``` sql
+WITH company_flags AS (
+  SELECT
+      company,
+      rank_2025,
+      profit,
+      CASE
+        WHEN rank_2025 <= 10 THEN 1
+        ELSE 0
+      END AS is_top_10,
+      CASE
+        WHEN profit > 0 THEN 1
+        ELSE 0
+      END AS is_profitable
+  FROM fortune_50
+)
+SELECT *
+FROM company_flags
+WHERE is_top_10 = 1
+  AND is_profitable = 1;
+```
+
+The two flags show whether each company meets each condition. The final query keeps companies with both flags equal to 1.
+
+Here, a missing rank or profit produces 0. That means the condition was not confirmed, including cases with missing information.
+
+#### Example 4: Count the Complement
+
+``` sql
+SELECT COUNT(*) AS complement_count
+FROM fortune_50
+WHERE NOT (
+  rank_2025 <= 10
+  AND profit > 0
+);
+```
+
+This counts companies outside the original condition.
+
+To check it, I can compare the original count, complement count, and total number of rows.
+
+If all conditions are true or false, the original and complement counts add to the total. If a condition is unknown because of `NULL`, a row can be excluded from both results.
+
+For the earlier flag-based query, using `NOT (is_top_10 = 1 AND is_profitable = 1)` includes every row excluded by the original flag filter. This works because the flags always contain either 0 or 1.
+
+#### Example 5: Filter Before Calculating an Average
+
+``` sql
+SELECT
+    airline,
+    AVG(delay) AS average_delay
+FROM flights
+WHERE flight_status = 'arrived'
+GROUP BY airline;
+```
+
+The query keeps arrived flights first, then calculates average delay for each airline.
+
+For example, AirJet delays of 10 and 25 minutes average 17.5 minutes. Negative delays represent early arrival in this exercise.
+
+An airline with no arrived flights would not appear in the result.
+
+### CEP Application
+
+For AO3, filters could help me focus on San Gabriel service pages or compare selected traffic channels. I could also use separate flags to check which pages meet a proposed review condition and which have missing measurements. Before using those flags to prioritize content, I would need to define the rules with the team and check the pages they select.
+
+## Chapter 4: Conditional Operations
+
+### Main Ideas
+
+#### Conditional Transformation
+
+`CASE` creates a value based on conditions. SQL checks the `WHEN` conditions from top to bottom and returns the first match.
+
+This matters when conditions overlap. A flight at 95% occupancy meets both `occupancy >= 90` and `occupancy >= 70`. The 90% condition needs to come first so the flight is labeled full.
+
+`ELSE` supplies the result when no condition matches. Without `ELSE`, unmatched rows receive `NULL`.
+
+#### Conditional Aggregation
+
+Conditional aggregation places `CASE` inside an aggregate function.
+
+This lets one query calculate a total for all qualifying rows and another measure for a smaller subset.
+
+For example, the airline exercise counted all flights passing the seat filter but calculated a separate average fuel efficiency for longhaul flights.
+
+Using `WHERE distance > 3000` would remove the other flights before every calculation. Putting that condition inside an aggregate limits only that particular measure.
+
+### Important SQL Syntax
+
+``` sql
+CASE
+  WHEN condition_1 THEN result_1
+  WHEN condition_2 THEN result_2
+  ELSE other_result
+END AS new_column
+```
+
+Common conditional aggregation patterns include:
+
+``` sql
+SUM(CASE WHEN condition THEN 1 ELSE 0 END)
+```
+
+``` sql
+COUNT(CASE WHEN condition THEN flight_id END)
+```
+
+``` sql
+AVG(CASE WHEN condition THEN numeric_column END)
+```
+
+The conditional `COUNT()` counts matching, nonmissing IDs. The conditional `AVG()` excludes unmatched rows because they return `NULL`.
+
+### When to Use It
+
+I would use `CASE` when I need categories such as occupancy status or delay status.
+
+I would use conditional aggregation when I need several measures from different subsets in the same result, without removing records needed for the other measures.
+
+### SQL Examples and Explanations
+
+These examples come from different flight exercises, each with one row per flight. The available columns and their meanings depend on the exercise.
+
+#### Example 1: Classify Occupancy and Calculate Each Group's Share
+
+The exercise uses these cutoffs:
+
+- Full: occupancy of at least 90%.
+- High: occupancy of at least 70% but below 90%.
+- Low: occupancy below 70%.
+
+``` sql
+WITH flights_occupancy AS (
+  SELECT
+      *,
+      100.0 * passengers
+      / NULLIF(total_seats, 0) AS occupancy
+  FROM flights
+),
+classified_flights AS (
+  SELECT
+      *,
+      CASE
+        WHEN occupancy IS NULL THEN 'unknown'
+        WHEN occupancy >= 90 THEN 'full'
+        WHEN occupancy >= 70 THEN 'high'
+        ELSE 'low'
+      END AS occupancy_status
+  FROM flights_occupancy
+)
+SELECT
+    occupancy_status,
+    COUNT(*) AS flight_count,
+    ROUND(
+      100.0 * COUNT(*)
+      / NULLIF(
+          (SELECT COUNT(*) FROM classified_flights),
+          0
+        ),
+      2
+    ) AS flight_percentage
+FROM classified_flights
+GROUP BY occupancy_status;
+```
+
+The first CTE calculates occupancy. The second assigns the status. The final query counts flights in each status and divides by the total number of flights.
+
+If two of ten flights are full, that group's percentage is 20.00%.
+
+The `unknown` branch is an added rule for missing occupancy or zero seats. It prevents those records from being labeled low.
+
+The label full follows the exercise's 90% cutoff. It does not mean every seat is occupied.
+
+To inspect individual classifications before grouping, I can keep the CTEs and replace the final query with `SELECT * FROM classified_flights;`.
+
+#### Example 2: Convert Distance, Classify Delay, Then Average
+
+This exercise contains distances in miles and kilometers. I need to convert them to the same unit before calculating an average.
+
+The delay groups are:
+
+- Early: delay of -5 minutes or less.
+- Late: delay of 5 minutes or more.
+- On time: delay strictly between -5 and 5 minutes.
+
+``` sql
+WITH prepared AS (
+  SELECT
+      flight_id,
+      CASE
+        WHEN distance_unit = 'miles'
+          THEN distance * 1.60934
+        ELSE distance
+      END AS distance_km,
+      CASE
+        WHEN delay IS NULL THEN 'Unknown'
+        WHEN delay <= -5 THEN 'Early'
+        WHEN delay >= 5 THEN 'Late'
+        ELSE 'On time'
+      END AS delay_status
+  FROM flights
+)
+SELECT
+    delay_status,
+    COUNT(*) AS flight_count,
+    ROUND(AVG(distance_km), 2) AS avg_distance_km
+FROM prepared
+GROUP BY delay_status;
+```
+
+The preparation step converts miles to kilometers using 1.60934 and assigns a delay status. The final query then averages the converted distance within each group.
+
+The conversion assumes all other recorded units are kilometers. Other or missing unit labels would need additional handling.
+
+For the practice rows, the corrected results are:
+
+| Delay status | Flights          | Average distance (km) |
+|:-------------|:-----------------|----------------------:|
+| Early        | F101, F104       |              2,359.34 |
+| On time      | F103, F106       |              1,018.74 |
+| Late         | F102, F105, F107 |              1,088.53 |
+
+F102 belongs in Late because its delay is 10 minutes. Exactly -5 is Early, and exactly 5 is Late.
+
+A delay of 0 fails both delay conditions and reaches `ELSE 'On time'`.
+
+This exercise showed why the preparation order matters. Averaging the original distances would mix miles and kilometers.
+
+#### Example 3: Combine WHERE, GROUP BY, CASE, and HAVING
+
+``` sql
+SELECT
+    airline,
+    COUNT(flight_id) AS total_widebody_flights,
+    COUNT(
+      CASE
+        WHEN distance > 3000 THEN flight_id
+      END
+    ) AS longhaul_flight_count,
+    AVG(fuel_efficiency) AS avg_fuel_efficiency_overall,
+    AVG(
+      CASE
+        WHEN distance > 3000 THEN fuel_efficiency
+      END
+    ) AS avg_fuel_efficiency_longhaul
+FROM flights
+WHERE total_seats >= 300
+GROUP BY airline
+HAVING COUNT(flight_id) >= 50;
+```
+
+`WHERE` first keeps flights with at least 300 seats. `GROUP BY` creates one group per airline. `HAVING` keeps airlines with at least 50 flights after that seat filter.
+
+The conditional count and average use only flights with distance greater than 3,000. The overall average still includes all flights passing the seat filter.
+
+This assumes `flight_id` is recorded for every flight and distance uses one consistent unit. The widebody and longhaul labels follow the exercise's rules.
+
+I also need to use the correct column name: `total_seats`, rather than `seat_count`.
+
+For the conditional average, I should not add `ELSE 0`. That would include other flights as zeros and lower the average. Leaving unmatched rows as `NULL` keeps them out of that calculation.
+
+### CEP Application
+
+A similar query could count all sessions and sessions with a confirmed inquiry for each landing page.
+
+The hypothetical `website_sessions` table below has one row per session. `inquiry_completed` is 1 for a confirmed inquiry, 0 for a confirmed non-inquiry, and `NULL` for missing tracking status.
+
+``` sql
+SELECT
+    landing_page,
+    COUNT(*) AS total_sessions,
+    SUM(
+      CASE
+        WHEN inquiry_completed = 1 THEN 1
+        ELSE 0
+      END
+    ) AS sessions_with_inquiry,
+    SUM(
+      CASE
+        WHEN inquiry_completed IS NULL THEN 1
+        ELSE 0
+      END
+    ) AS sessions_missing_inquiry_status,
+    ROUND(
+      100.0
+      * SUM(
+          CASE
+            WHEN inquiry_completed = 1 THEN 1
+            ELSE 0
+          END
+        )
+      / NULLIF(COUNT(inquiry_completed), 0),
+      2
+    ) AS inquiry_rate_pct_among_known_sessions
+FROM website_sessions
+GROUP BY landing_page;
+```
+
+The rate uses sessions with a known inquiry status as the denominator. A separate column shows how many sessions have missing status.
+
+If all statuses are known, the denominator equals total sessions.
+
+For AO3, I could review these results alongside the content audit. A page with a low rate might need closer investigation, but the rate alone would not explain whether content, traffic quality, or tracking caused the result.
+
+# Overall Reflection and Series Synthesis
+
+The most useful parts of this course were grouping, percentage calculations, and `CASE`. The order and trip exercises helped me distinguish a row count from a unique-person count. Grouping also made it clearer that I need to decide what each result row should represent before choosing the columns.
+
+The flight exercises required more care. I needed to check the exact category boundaries, put the 90% occupancy condition before the 70% condition, and convert distance units before averaging. Reviewing individual flights helped clarify the logic. F102's 10-minute delay places it in Late, while a delay of 0 reaches the On time result through `ELSE`.
+
+Compared with Introduction to SQL, this course went beyond selecting and sorting records. I can now summarize groups, calculate new measures, combine conditions, and apply different rules within one query. The final airline exercise brought these steps together: filter flights with `WHERE`, group by airline, calculate conditional measures, and filter the groups with `HAVING`.
+
+In BigQuery, I could use the same patterns after preparing the relevant fields. For GA4 data, I would first need to account for event-level rows and nested fields. The session examples in these notes assume that preparation has already been completed.
+
+For my CEP, I could use these skills to compare landing pages and review available inquiry data alongside my content audit. I expect to return to grouping, percentage denominators, and conditional averages most often. I would also revisit the basic query structure in my Introduction to SQL report and CTEs, joins, and `UNNEST()` in my BigQuery report when preparing data for those calculations.
+
+# Appendix: Publication Links
+
+- [GitHub Repository](https://github.com/Sheilaaa0312/ibm-6500-sql-learning-portfolio)
+- [Published Intermediate SQL Report](https://sheilaaa0312.github.io/ibm-6500-sql-learning-portfolio/intermediate-sql.html)
